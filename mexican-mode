@@ -1,0 +1,50 @@
+#!/bin/bash
+
+function help {
+    echo "mexican-mode [options]"
+    echo "Apply mexican mode filter (blue-light filter)."
+    echo ""
+    echo "Options:"
+    echo "  -h, --help     display help."
+    echo "  -e, --enable   enable the filter."
+    echo "  -d, --disable  disable the filter."
+    exit
+}
+
+function error {
+    echo "error: $1"
+    echo ""
+    help
+}
+
+function disable_filter() {
+    redshift -x &> /dev/null
+}
+
+function enable_filter() {
+    # Remove existing filter and set new to 2700K.
+    redshift -x &> /dev/null
+    redshift -O 2700K &> /dev/null
+}
+
+# -o is required.
+parsed_arguments=$(getopt -n mexican-mode --long help,enable,disable -o h,e,d -- "$@")
+valid_arguments=$?
+if [ "$valid_arguments" != "0" ]; then
+    help
+fi
+
+# We use eval in order to expand $parsed_arguments, so that set
+# is called with multiple arguments instead of a string containing them.
+eval set -- "$parsed_arguments"
+while :
+do
+    # shift moves positional arguments.
+    case "$1" in
+        --)           enable_filter; break;;
+        --enable|-e)  enable_filter; break;;
+        --disable|-d) disable_filter; break;;
+        --help|-h)    help;;
+        *)            error "invalid option: $1.";;
+    esac
+done
