@@ -1,23 +1,50 @@
-sudo apt install -y vim curl git mpv llvm clang ninja-build cmake meson
+sudo apt install -y vim curl git git-lfs mpv llvm clang clangd clang-format \
+                    lld ninja-build cmake meson zathura nomacs python3-pip
 
 # Set up the $HOME/bin directory
 mkdir -p $HOME/bin
 
 # Download the scripts
-pushd $HOME/bin
-wget -O mexican-mode https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/mexican-mode
+pushd $HOME/bin > /dev/null
+wget -q -O mexican-mode https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/mexican-mode
 chmod +x mexican-mode
-popd
+popd > /dev/null
 
 source $HOME/.profile
+
+# Alias python
+sudo ln -s /usr/bin/python3 /usr/bin/python
 
 # Setup keyboard and mouse
 gsettings set org.gnome.desktop.peripherals.mouse accel-profile "flat"
 gsettings set org.gnome.desktop.peripherals.mouse speed 0.0
 gsettings set org.gnome.desktop.peripherals.keyboard delay 300
 
+# Remove workspace keybinds as they interfere with the vscode keybinds
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-down []
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-up []
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-left []
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-right []
+gsettings set org.gnome.desktop.wm.keybindings move-to-workspace-last []
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-down []
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-last []
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left []
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right []
+gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up []
+
 # Install VSCode
-echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vs-code.list
+echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vs-code.list > /dev/null
 curl -s https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
 sudo apt update
-sudo apt install code
+sudo apt install -y code
+
+# Download vscode user settings and keybinds 
+mkdir -p $HOME/.config/Code/User
+pushd $HOME/.config/Code/User > /dev/null
+wget -q -O keybindings.json https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/keybindings.json
+popd > /dev/null
+
+# Final upgrade and cleanup
+sudo apt update
+sudo apt upgrade
+sudo apt autoremove
