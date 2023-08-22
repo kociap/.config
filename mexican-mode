@@ -18,13 +18,11 @@ function error {
 }
 
 function disable_filter() {
-    redshift -x &> /dev/null
+    gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
 }
 
 function enable_filter() {
-    # Remove existing filter and set new to 2700K.
-    redshift -x &> /dev/null
-    redshift -O 2700K &> /dev/null
+    gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
 }
 
 # -o is required.
