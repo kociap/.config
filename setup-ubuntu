@@ -1,0 +1,23 @@
+sudo apt install -y vim curl git mpv llvm clang ninja-build cmake meson
+
+# Set up the $HOME/bin directory
+mkdir -p $HOME/bin
+
+# Download the scripts
+pushd $HOME/bin
+wget -O mexican-mode https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/mexican-mode
+chmod +x mexican-mode
+popd
+
+source $HOME/.profile
+
+# Setup keyboard and mouse
+gsettings set org.gnome.desktop.peripherals.mouse accel-profile "flat"
+gsettings set org.gnome.desktop.peripherals.mouse speed 0.0
+gsettings set org.gnome.desktop.peripherals.keyboard delay 300
+
+# Install VSCode
+echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vs-code.list
+curl -s https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
+sudo apt update
+sudo apt install code
