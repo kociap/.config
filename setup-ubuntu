@@ -1,5 +1,5 @@
-sudo apt install -y vim curl git git-lfs mpv llvm clang clangd clang-format \
-                    lld ninja-build cmake meson zathura nomacs python3-pip
+sudo apt-get -y install vim curl git git-lfs mpv ninja-build cmake meson zathura nomacs python3-pip \
+                    htop
 
 # Set up the $HOME/bin directory
 mkdir -p $HOME/bin
@@ -32,11 +32,18 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left []
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right []
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up []
 
-# Install VSCode
-echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vs-code.list > /dev/null
-curl -s https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-sudo apt update
-sudo apt install -y code
+# Add repositories
+## LLVM and Clang
+source /etc/os-release 
+wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm.asc > /dev/null
+echo "deb [arch=amd64] http://apt.llvm.org/${UBUNTU_CODENAME}/ llvm-toolchain-${UBUNTU_CODENAME} main" | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
+## VSCode
+wget -qO- https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc > /dev/null
+echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" | sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+
+# Install LLVM, Clang, VSCode
+sudo apt-get update
+sudo apt-get -y install code llvm clang clangd clang-format clang-tidy clang-tools lld
 
 # Download vscode user settings and keybinds 
 mkdir -p $HOME/.config/Code/User
@@ -45,6 +52,5 @@ wget -q -O keybindings.json https://raw.githubusercontent.com/kociap/ubuntu-util
 popd > /dev/null
 
 # Final upgrade and cleanup
-sudo apt update
-sudo apt upgrade
-sudo apt autoremove
+sudo apt-get -y upgrade
+sudo apt-get -y autoremove
