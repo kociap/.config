@@ -1,5 +1,5 @@
 sudo apt-get -y install vim curl git git-lfs mpv ninja-build cmake meson zathura nomacs python3-pip \
-                    htop
+                        htop pandoc flameshot
 
 # Set up the $HOME/bin directory
 mkdir -p $HOME/bin
@@ -32,9 +32,18 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-left []
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-right []
 gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up []
 
+# Setup Flameshot keybind
+gsettings set org.gnome.shell.keybindings show-screenshot-ui []
+gsettings set org.gnome.shell.keybindings screenshot-window []
+gsettings set org.gnome.shell.keybindings screenshot []
+gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "flameshot"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "flameshot gui"
+gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ binding "Print"
+
 # Add repositories
 ## LLVM and Clang
-source /etc/os-release 
+source /etc/os-release
 wget -qO- https://apt.llvm.org/llvm-snapshot.gpg.key | sudo tee /etc/apt/trusted.gpg.d/llvm.asc > /dev/null
 echo "deb [arch=amd64] http://apt.llvm.org/${UBUNTU_CODENAME}/ llvm-toolchain-${UBUNTU_CODENAME} main" | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
 ## VSCode
@@ -45,7 +54,7 @@ echo "deb [arch=amd64] http://packages.microsoft.com/repos/vscode stable main" |
 sudo apt-get update
 sudo apt-get -y install code llvm clang clangd clang-format clang-tidy clang-tools lld
 
-# Download vscode user settings and keybinds 
+# Download vscode user settings and keybinds
 mkdir -p $HOME/.config/Code/User
 pushd $HOME/.config/Code/User > /dev/null
 wget -q -O keybindings.json https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/keybindings.json
