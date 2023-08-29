@@ -12,6 +12,9 @@ popd > /dev/null
 
 source $HOME/.profile
 
+# Initialise mexican mode defaults
+mexican-mode -i
+
 # Alias python
 sudo ln -s /usr/bin/python3 /usr/bin/python
 
@@ -34,8 +37,6 @@ gsettings set org.gnome.desktop.wm.keybindings switch-to-workspace-up []
 
 # Setup Flameshot keybind
 gsettings set org.gnome.shell.keybindings show-screenshot-ui []
-gsettings set org.gnome.shell.keybindings screenshot-window []
-gsettings set org.gnome.shell.keybindings screenshot []
 gsettings set org.gnome.settings-daemon.plugins.media-keys custom-keybindings "['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/']"
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ name "flameshot"
 gsettings set org.gnome.settings-daemon.plugins.media-keys.custom-keybinding:/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/ command "flameshot gui"
