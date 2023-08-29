@@ -1,35 +1,58 @@
 #!/bin/bash
 
 function help {
-    echo "mexican-mode [options]"
-    echo "Apply mexican mode filter (blue-light filter)."
-    echo ""
-    echo "Options:"
-    echo "  -h, --help     display help."
-    echo "  -e, --enable   enable the filter."
-    echo "  -d, --disable  disable the filter."
-    exit
+  echo "mexican-mode [options]"
+  echo "Apply mexican mode filter (blue-light filter)."
+  echo ""
+  echo "Options:"
+  echo "  -h, --help                     display help."
+  echo "  -e, --enable                   enable the filter."
+  echo "  -d, --disable                  disable the filter."
+  echo "  -t, --temperature TEMPERATURE  change the temperature to TEMPERATURE."
+  echo "  -i, --initialise               initialise the filter to default settings"
+  echo "                                 (first time setup or resetup)."
+  exit
 }
 
 function error {
-    echo "error: $1"
-    echo ""
-    help
+  echo "error: $1"
+  echo ""
+  help
+}
+
+function is_integer() {
+  [[ "$1" =~ ^[0-9]+$ ]]
+}
+
+# set_temperature
+#
+# Parameters:
+# temperature (uint32) - the temperature to the night-light to.
+#
+function set_temperature() {
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature $1
+}
+
+function initialise_night_light() {
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-from 4.0
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-to 4.0
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-schedule-automatic false
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-temperature 2700
 }
 
 function disable_filter() {
-    gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled false
 }
 
 function enable_filter() {
-    gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
+  gsettings set org.gnome.settings-daemon.plugins.color night-light-enabled true
 }
 
 # -o is required.
-parsed_arguments=$(getopt -n mexican-mode --long help,enable,disable -o h,e,d -- "$@")
+parsed_arguments=$(getopt -n mexican-mode --long help,enable,disable,initialise,temperature: -o h,e,d,i,t: -- "$@")
 valid_arguments=$?
 if [ "$valid_arguments" != "0" ]; then
-    help
+  help
 fi
 
 # We use eval in order to expand $parsed_arguments, so that set
@@ -37,12 +60,22 @@ fi
 eval set -- "$parsed_arguments"
 while :
 do
-    # shift moves positional arguments.
-    case "$1" in
-        --)           enable_filter; break;;
-        --enable|-e)  enable_filter; break;;
-        --disable|-d) disable_filter; break;;
-        --help|-h)    help;;
-        *)            error "invalid option: $1.";;
-    esac
+  # shift moves positional arguments.
+  case "$1" in
+    --)                 enable_filter; break;;
+    --enable|-e)        enable_filter; shift;;
+    --disable|-d)       disable_filter; shift;;
+    --initialise|-i)    initialise_night_light; shift;;
+    --temperature|-t)   if ! is_integer $2; then
+                          error "argument to $1 must be an unsigned integer"
+                        fi
+                        if [ $2 -lt 1000 ] || [ $2 -gt 10000 ]; then
+                          error "argument to $1 must be in range [1000, 10000]"
+                        fi
+                        set_temperature $2
+                        shift 2
+                        ;;
+    --help|-h)          help;;
+    *)                  error "invalid option: $1.";;
+  esac
 done
