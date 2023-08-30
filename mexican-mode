@@ -58,11 +58,17 @@ fi
 # We use eval in order to expand $parsed_arguments, so that set
 # is called with multiple arguments instead of a string containing them.
 eval set -- "$parsed_arguments"
+
+if [ $# -le 1 ]; then
+  enable_filter
+  exit 0
+fi
+
 while :
 do
   # shift moves positional arguments.
   case "$1" in
-    --)                 enable_filter; break;;
+    --)                 break;;
     --enable|-e)        enable_filter; shift;;
     --disable|-d)       disable_filter; shift;;
     --initialise|-i)    initialise_night_light; shift;;
