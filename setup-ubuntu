@@ -1,5 +1,45 @@
-sudo apt-get -y install vim curl git git-lfs mpv ninja-build cmake meson zathura nomacs python3-pip \
-                        htop pandoc flameshot
+# Kill snap
+# For some reason /var/snap/firefox/common/host-hunspell is a read-only mount which will block the
+# purge, hence we have to unmount it first.
+sudo umount /var/snap/firefox/common/host-hunspell
+sudo apt-get purge snapd
+# We don't want Ubuntu to install snap with the next update.
+sudo apt-mark hold snapd
+# However, that is not enough to prevent snap from being installed. We follow what Linux Mint does
+# and create a preference for APT.
+cat <<EOF | sudo tee /etc/apt/preferences.d/nosnap.pref > /dev/null
+# To prevent repository packages from triggering the installation of Snap,
+# this file forbids snapd from being installed by APT.
+# For more information: https://linuxmint-user-guide.readthedocs.io/en/latest/snap.html
+
+Package: snapd
+Pin: release a=*
+Pin-Priority: -10
+EOF
+# Cleanup files
+sudo rm -rf /var/snap
+sudo rm -rf $HOME/snap
+
+# Install Firefox
+# Since we have uninstalled snap we do not have Firefox anymore. We install it manually.
+pushd /tmp > /dev/null
+wget -q -O firefox-latest.tar.bz2 "https://download.mozilla.org/?product=firefox-latest&os=linux64&lang=en-GB"
+tar -xf firefox-latest.tar.bz2
+sudo mv firefox /usr/local/bin/
+popd > /dev/null
+
+cat <<EOF | sudo tee /etc/profile.d/firefox.sh > /dev/null
+export PATH="/usr/local/bin/firefox:$PATH"
+EOF
+sudo chmod +x /etc/profile.d/firefox.sh
+source /etc/profile.d/firefox.sh
+
+# Set up locale
+localectl set-locale LANG=en_GB.UTF-8
+localectl set-locale LC_TIME=en_NZ.utf-8
+
+sudo apt-get -y install vim curl git git-lfs mpv ninja-build cmake meson zathura nomacs \
+                        python3-pip htop pandoc flameshot
 
 # Set up the $HOME/bin directory
 mkdir -p $HOME/bin
