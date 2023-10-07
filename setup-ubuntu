@@ -16,6 +16,8 @@ Package: snapd
 Pin: release a=*
 Pin-Priority: -10
 EOF
+# Unmount host-hunspell once again to ensure it is definitely gone
+sudo umount /var/snap/firefox/common/host-hunspell
 # Cleanup files
 sudo rm -rf /var/snap
 sudo rm -rf $HOME/snap
@@ -104,6 +106,7 @@ sudo apt-get -y install code llvm clang clangd clang-format clang-tidy clang-too
 mkdir -p $HOME/.config/Code/User
 pushd $HOME/.config/Code/User > /dev/null
 wget -q -O keybindings.json https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/keybindings.json
+wget -q -O settings.json https://raw.githubusercontent.com/kociap/ubuntu-utilities/master/settings.json
 popd > /dev/null
 
 # Final upgrade and cleanup
