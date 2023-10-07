@@ -39,7 +39,7 @@
         "command": "editor.action.insertCursorAbove",
         "when": "editorTextFocus"
     },
-        {
+    {
         "key": "alt+left",
         "command": "workbench.action.navigateBack",
         "when": "canNavigateBack"
@@ -58,5 +58,9 @@
         "key": "ctrl+shift+-",
         "command": "-workbench.action.navigateForward",
         "when": "canNavigateForward"
+    },
+    {
+        "key": "ctrl+q",
+        "command": "-workbench.action.quit"
     }
 ]
