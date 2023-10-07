@@ -60,6 +60,11 @@ mexican-mode -i
 # Alias python
 sudo ln -s /usr/bin/python3 /usr/bin/python
 
+# Set theme to dark and olive (green)
+gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
+gsettings set org.gnome.desktop.interface gtk-theme 'Yaru-olive-dark'
+gsettings set org.gnome.desktop.interface icon-theme 'Yaru-olive'
+
 # Set blank screen delay to 900 seconds (15 minutes)
 gsettings set org.gnome.desktop.session idle-delay 900
 
