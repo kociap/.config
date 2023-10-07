@@ -1,0 +1,67 @@
+{
+    "telemetry.telemetryLevel": "crash",
+    "security.workspace.trust.enabled": false,
+    "files.trimTrailingWhitespace": true,
+    "workbench.iconTheme": "material-icon-theme",
+    "workbench.colorTheme": "Visual Studio Dark",
+    "workbench.colorCustomizations": {
+        "[Visual Studio Dark]": {
+            "statusBar.background": "#333333",
+            "statusBarItem.remoteBackground": "#333333"
+        }
+    },
+    "[cpp]": {
+        "editor.inlayHints.enabled": "off",
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "[c]": {
+        "editor.inlayHints.enabled": "off",
+        "editor.defaultFormatter": "xaver.clang-format"
+    },
+    "editor.rulers": [
+        100
+    ],
+    "editor.formatOnSave": true,
+    "editor.tabSize": 2,
+    "editor.autoClosingOvertype": "never",
+    "editor.autoClosingBrackets": "never",
+    "editor.autoClosingQuotes": "never",
+    "editor.minimap.enabled": false,
+    "editor.tokenColorCustomizations": {
+        "textMateRules": [
+            {
+                "scope": [
+                    "comment",
+                    "punctuation.definition.comment",
+                ],
+                "settings": {
+                    "fontStyle": ""
+                }
+            },
+            {
+                "scope": [
+                    "entity.name.function"
+                ],
+                "settings": {
+                    "foreground": "#a7e400"
+                }
+            },
+            {
+                "scope": [
+                    "entity.name.type",
+                ],
+                "settings": {
+                    "foreground": "#b574ff"
+                }
+            },
+            {
+                "scope": [
+                    "keyword.control"
+                ],
+                "settings": {
+                    "foreground": "#dd4141",
+                }
+            }
+        ]
+    },
+}
