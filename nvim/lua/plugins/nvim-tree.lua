@@ -1,0 +1,15 @@
+return {}
+-- return {
+--   "nvim-tree/nvim-tree.lua",
+--   dependencies = "nvim-tree/nvim-web-devicons",
+--   config = function()
+--     local ntree = require("nvim-tree")
+--
+--     ntree.setup({
+--       git = {
+--         ignore = false
+--       }
+--     })
+--   end
+-- }
+--
