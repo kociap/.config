@@ -1,4 +1,4 @@
-# .config
+# dotconfig
 Collection of my configs, utility and setup scripts (primarily for Ubuntu).
 
 # Scripts
