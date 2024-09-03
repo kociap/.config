@@ -1,5 +1,5 @@
-# ubuntu-utilities
-Ubuntu Utilities are a set of convenience and setup scripts for streamlining setup and work on Ubuntu.
+# .config
+Collection of my configs, utility and setup scripts (primarily for Ubuntu).
 
 # Scripts
 - setup-ubuntu - setup script for configuring a new installation of Ubuntu.
